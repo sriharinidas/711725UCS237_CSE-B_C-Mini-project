@@ -1,0 +1,4 @@
+Acct  Last Name       First Name    Balance
+1     John            Joe           1222.00
+6384737                                 0.00
+134217728�@                             0.00

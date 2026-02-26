@@ -10,6 +10,8 @@ struct clientData
     char lastName[15];    // account last name
     char firstName[10];   // account first name
     double balance;       // account balance
+    char phone[15];      // account phone number
+    char email[30];      // account email address
 };                        // end structure clientData
 
 // prototypes
@@ -53,6 +55,9 @@ int main(int argc, char *argv[])
             deleteRecord(cfPtr);
             break;
         // display if user does not select valid choice
+        case 5:
+            updateContact(cfPtr);
+            break;
         default:
             puts("Incorrect choice");
             break;
@@ -164,9 +169,11 @@ void deleteRecord(FILE *fPtr)
         // replace existing record with blank record
         fwrite(&blankClient, sizeof(struct clientData), 1, fPtr);
     } // end else
+printf("Enter lastname firstname balance phone email age:\n ");
+scanf("%14s%9s%lf%14s%29s%d", client.lastName, client.firstName, &client.balance, client.phone, client.email);
 } // end function deleteRecord
 
-// create and insert record
+// create and insert recor
 void newRecord(FILE *fPtr)
 {
     // create clientData with default information
@@ -211,7 +218,10 @@ unsigned int enterChoice(void)
                  "2 - update an account\n"
                  "3 - add a new account\n"
                  "4 - delete an account\n"
-                 "5 - end program\n? ");
+                 "5 - phone number\n"
+                 "6 - email address\n"
+                 "7 - end program\n? ");
+
 
     scanf("%u", &menuChoice); // receive choice from user
     return menuChoice;

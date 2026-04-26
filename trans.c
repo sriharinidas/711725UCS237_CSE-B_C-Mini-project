@@ -24,8 +24,6 @@ void updateContact(FILE *fPtr);
 void updateEmail(FILE *fPtr);
 void searchByName(FILE *fPtr);
 void totalBalance(FILE *fPtr);
-
-
 int main(int argc, char *argv[])
 {
     FILE *cfPtr;         // credit.dat file pointer
@@ -66,8 +64,14 @@ int main(int argc, char *argv[])
             break;
         case 6:
             updateEmail(cfPtr); 
-            break;                  
+            break;   
         case 7:
+            searchByName(cfPtr);
+            break;
+        case 8:
+            totalBalance(cfPtr);
+            break;              
+        case 9:
             puts("End of run.");
             break;
         default:

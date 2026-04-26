@@ -181,6 +181,15 @@ void deleteRecord(FILE *fPtr)
     else
     { // delete record
         // move file pointer to correct record in file
+        char confirm;
+    printf("Are you sure you want to delete? (y/n): ");
+    scanf(" %c", &confirm);
+
+    if (confirm != 'y')
+    {
+        printf("Delete cancelled.\n");
+        return;
+    }
         fseek(fPtr, (accountNum - 1) * sizeof(struct clientData), SEEK_SET);
         // replace existing record with blank record
         fwrite(&blankClient, sizeof(struct clientData), 1, fPtr);

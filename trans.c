@@ -20,6 +20,8 @@ void textFile(FILE *readPtr);
 void updateRecord(FILE *fPtr);
 void newRecord(FILE *fPtr);
 void deleteRecord(FILE *fPtr);
+void updateContact(FILE *fPtr);
+void updateEmail(FILE *fPtr);
 
 int main(int argc, char *argv[])
 {
@@ -34,7 +36,8 @@ int main(int argc, char *argv[])
     }
 
     // enable user to specify action
-    while ((choice = enterChoice()) != 5)
+    while ((choice = enterChoice()) != 7
+)
     {
         switch (choice)
         {
@@ -57,6 +60,12 @@ int main(int argc, char *argv[])
         // display if user does not select valid choice
         case 5:
             updateContact(cfPtr);
+            break;
+        case 6:
+            updateEmail(cfPtr); 
+            break;                  
+        case 7:
+            puts("End of run.");
             break;
         default:
             puts("Incorrect choice");
@@ -169,8 +178,8 @@ void deleteRecord(FILE *fPtr)
         // replace existing record with blank record
         fwrite(&blankClient, sizeof(struct clientData), 1, fPtr);
     } // end else
-printf("Enter lastname firstname balance phone email age:\n ");
-scanf("%14s%9s%lf%14s%29s%d", client.lastName, client.firstName, &client.balance, client.phone, client.email);
+printf("Enter lastname firstname balance phone email  :\n ");
+scanf("%14s%9s%1f%14s%29s", client.lastName, client.firstName, &client.balance, client.phone, client.email);
 } // end function deleteRecord
 
 // create and insert recor
@@ -196,8 +205,13 @@ void newRecord(FILE *fPtr)
     else
     { // create record
         // user enters last name, first name and balance
-        printf("%s", "Enter lastname, firstname, balance\n? ");
-        scanf("%14s%9s%lf", client.lastName, client.firstName, &client.balance);
+        printf("%s", "Enter lastname, firstname, balance, phone, email\n? ");
+           scanf("%14s%9s%lf%14s%29s",
+      client.lastName,
+      client.firstName,
+      &client.balance,
+      client.phone,
+      client.email);
 
         client.acctNum = accountNum;
         // move file pointer to correct record in file
@@ -206,6 +220,68 @@ void newRecord(FILE *fPtr)
         fwrite(&client, sizeof(struct clientData), 1, fPtr);
     } // end else
 } // end function newRecord
+void updateContact(FILE *fPtr)
+{
+    unsigned int account;
+    struct clientData client = {0, "", "", 0.0};
+
+    printf("Enter account number (1-100): ");
+    scanf("%u", &account);
+
+    fseek(fPtr, (account - 1) * sizeof(struct clientData), SEEK_SET);
+    fread(&client, sizeof(struct clientData), 1, fPtr);
+
+    if (client.acctNum == 0)
+    {
+        printf("Account not found.\n");
+        return;
+    }
+
+    printf("1 - Update Phone\n2 - Update Email\nChoice: ");
+    int ch;
+    scanf("%d", &ch);
+
+    if (ch == 1)
+    {
+        printf("Enter new phone: ");
+        scanf("%14s", client.phone);
+    }
+    else if (ch == 2)
+    {
+        printf("Enter new email: ");
+        scanf("%29s", client.email);
+    }
+
+    fseek(fPtr, -sizeof(struct clientData), SEEK_CUR);
+    fwrite(&client, sizeof(struct clientData), 1, fPtr);
+
+    printf("Contact updated successfully.\n");
+}
+void updateEmail(FILE *fPtr)
+{
+    unsigned int account;
+    struct clientData client = {0, "", "", 0.0};
+
+    printf("Enter account number (1-100): ");
+    scanf("%u", &account);
+
+    fseek(fPtr, (account - 1) * sizeof(struct clientData), SEEK_SET);
+    fread(&client, sizeof(struct clientData), 1, fPtr);
+
+    if (client.acctNum == 0)
+    {
+        printf("Account not found.\n");
+        return;
+    }
+
+    printf("Enter new email: ");
+    scanf("%29s", client.email);
+
+    fseek(fPtr, -sizeof(struct clientData), SEEK_CUR);
+    fwrite(&client, sizeof(struct clientData), 1, fPtr);
+
+    printf("Email updated successfully.\n");
+}
 
 // enable user to input menu choice
 unsigned int enterChoice(void)

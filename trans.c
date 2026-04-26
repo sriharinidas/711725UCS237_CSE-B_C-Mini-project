@@ -22,6 +22,7 @@ void newRecord(FILE *fPtr);
 void deleteRecord(FILE *fPtr);
 void updateContact(FILE *fPtr);
 void updateEmail(FILE *fPtr);
+void searchByName(FILE *fPtr);
 
 int main(int argc, char *argv[])
 {
@@ -287,6 +288,33 @@ void updateEmail(FILE *fPtr)
     fwrite(&client, sizeof(struct clientData), 1, fPtr);
 
     printf("Email updated successfully.\n");
+}
+void searchByName(FILE *fPtr)
+{
+    char name[15];
+    struct clientData client;
+    int found = 0;
+
+    printf("Enter last name to search: ");
+    scanf("%14s", name);
+
+    rewind(fPtr);
+
+    while (fread(&client, sizeof(struct clientData), 1, fPtr) == 1)
+    {
+        if (strcmp(client.lastName, name) == 0)
+        {
+            printf("Found: %d %s %s %.2f\n",
+                   client.acctNum,
+                   client.lastName,
+                   client.firstName,
+                   client.balance);
+            found = 1;
+        }
+    }
+
+    if (!found)
+        printf("No record found.\n");
 }
 
 // enable user to input menu choice

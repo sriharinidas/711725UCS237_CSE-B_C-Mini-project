@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     }
 
     // enable user to specify action
-    while ((choice = enterChoice()) != 7
+    while ((choice = enterChoice()) != 7)
 )
     {
         switch (choice)
@@ -92,18 +92,24 @@ void textFile(FILE *readPtr)
     else
     {
         rewind(readPtr); // sets pointer to beginning of file
-        fprintf(writePtr, "%-6s%-16s%-11s%10s\n", "Acct", "Last Name", "First Name", "Balance");
+        fprintf(writePtr, "%-6s%-16s%-11s%-10s%-15s%-30s\n",
+        "Acct", "Last Name", "First Name", "Balance", "Phone", "Email");
 
         // copy all records from random-access file into text file
-        while (!feof(readPtr))
+        while (fread(&client, sizeof(struct clientData), 1, readPtr) == 1)
         {
             result = fread(&client, sizeof(struct clientData), 1, readPtr);
 
             // write single record to text file
             if (result != 0 && client.acctNum != 0)
             {
-                fprintf(writePtr, "%-6d%-16s%-11s%10.2f\n", client.acctNum, client.lastName, client.firstName,
-                        client.balance);
+                fprintf(writePtr, "%-6d%-16s%-11s%-10.2f%-15s%-30s\n",
+        client.acctNum,
+        client.lastName,
+        client.firstName,
+        client.balance,
+        client.phone,
+        client.email);
             } // end if
         }     // end while
 

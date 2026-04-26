@@ -23,6 +23,8 @@ void deleteRecord(FILE *fPtr);
 void updateContact(FILE *fPtr);
 void updateEmail(FILE *fPtr);
 void searchByName(FILE *fPtr);
+void totalBalance(FILE *fPtr);
+
 
 int main(int argc, char *argv[])
 {
@@ -325,7 +327,21 @@ void searchByName(FILE *fPtr)
     if (!found)
         printf("No record found.\n");
 }
+void totalBalance(FILE *fPtr)
+{
+    struct clientData client;
+    double total = 0;
 
+    rewind(fPtr);
+
+    while (fread(&client, sizeof(struct clientData), 1, fPtr) == 1)
+    {
+        if (client.acctNum != 0)
+            total += client.balance;
+    }
+
+    printf("Total Bank Balance: %.2f\n", total);
+}
 // enable user to input menu choice
 unsigned int enterChoice(void)
 {
